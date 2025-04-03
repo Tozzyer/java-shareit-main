@@ -24,7 +24,7 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(InputDataErrorException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public Map<String, String> InputDataErrorExceptionHandler(InputDataErrorException e) {
+    public Map<String, String> inputDataErrorExceptionHandler(InputDataErrorException e) {
         return Map.of("Error message: ", e.getMessage());
     }
 
