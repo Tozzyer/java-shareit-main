@@ -57,7 +57,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     public ItemDto updateItem(long id, long userId, ItemDto itemDto) {
-        userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id " + userId + " not found"));
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));
         return itemRepository.findById(id).map(existingItem -> {
             boolean isUpdated = false;
             if (existingItem.getOwner().getId() != userId) {
