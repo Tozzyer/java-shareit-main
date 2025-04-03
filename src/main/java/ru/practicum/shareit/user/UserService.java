@@ -1,8 +1,8 @@
 package ru.practicum.shareit.user;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exceptions.NotFoundException;
 
 
 @Service
@@ -37,7 +37,7 @@ public class UserService {
             } else {
                 return existingUser;
             }
-        }).orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
+        }).orElseThrow(() -> new NotFoundException("User with id " + id + " not found"));
 
 
     }
