@@ -50,13 +50,11 @@ public class ItemServiceImpl implements ItemService {
         comment.setAuthorName(user.getName());
         comment.setItem(item);
         comment.setCreated(LocalDateTime.now());
-//        if (bookingRepository.getBookingByUserIdAndItemId(userId, itemId) != null) {
-//            if (bookingRepository.getBookingByUserIdAndItemId(userId, itemId).getStatus() == BookingState.APPROVED) {
-//                throw new BadRequestException("You are not owner of this booking");
-//            }
-//        }
+        if (bookingRepository.getBookingByUserIdAndItemId(userId, itemId) == null) {
+            throw new BadRequestException("You are not owner of this booking");
+        }
 
-        return commentMapper.toDto(commentRepository.save(comment));
+        return CommentMapper.toDto(commentRepository.save(comment));
     }
 
     public ItemDto getItem(long id) {
