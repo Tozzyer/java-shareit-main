@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.InputDataErrorException;
 import ru.practicum.shareit.exceptions.NotFoundException;
@@ -42,17 +44,15 @@ public class ItemServiceImpl implements ItemService {
     }
 
     public CommentDto createComment(CommentDto commentDto, long userId, long itemId) {
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException("Item not found with id: " + itemId));
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
-        Comment comment = commentMapper.fromDto(commentDto);
-        comment.setAuthorName(user.getName());
-        comment.setItem(item);
-        comment.setCreated(LocalDateTime.now());
-        if (bookingRepository.getBookingByUserIdAndItemId(userId, itemId) == null) {
-            throw new BadRequestException("You are not owner of this booking");
+        List<Booking> bookings = bookingRepository.findByUserIdAndStatusAndEndTimeBeforeOrderByEndTimeDesc(userId, BookingState.APPROVED,
+                LocalDateTime.now());
+        if ((bookings == null || bookings.isEmpty()) || bookings.stream().noneMatch(booking -> booking.getItem().getId() == itemId)) {
+            throw new BadRequestException("Booking with id " + itemId + " not found");
         }
-
+        Comment comment = commentMapper.fromDto(commentDto);
+        comment.setCreated(LocalDateTime.now());
+        comment.setAuthorName(userRepository.getById(userId).getName());
+        comment.setItem(itemRepository.getById(itemId));
         return CommentMapper.toDto(commentRepository.save(comment));
     }
 
