@@ -43,6 +43,7 @@ public class ItemServiceImpl implements ItemService {
 
     }
 
+    @Transactional
     public CommentDto createComment(CommentDto commentDto, long userId, long itemId) {
         List<Booking> bookings = bookingRepository.findByUserIdAndStatusAndEndTimeBeforeOrderByEndTimeDesc(userId, BookingState.APPROVED,
                 LocalDateTime.now());

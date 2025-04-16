@@ -18,9 +18,9 @@ public class ExceptionsHandler {
         return Map.of("Error message: ", e.getMessage());
     }
 
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(ServerErrorException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, String> badRequstExceptionHandler(BadRequestException e) {
+    public Map<String, String> serverErrorExceptionHandler(ServerErrorException e) {
         return Map.of("Error message: ", e.getMessage());
     }
 
@@ -39,4 +39,9 @@ public class ExceptionsHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> badRequestExceptionHandler(BadRequestException e) {
+        return Map.of("Error message: ", e.getMessage());
+    }
 }

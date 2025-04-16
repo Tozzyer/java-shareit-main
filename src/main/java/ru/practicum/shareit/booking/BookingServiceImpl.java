@@ -7,7 +7,7 @@ import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingState;
-import ru.practicum.shareit.exceptions.BadRequestException;
+import ru.practicum.shareit.exceptions.ServerErrorException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
@@ -52,38 +52,40 @@ public class BookingServiceImpl implements BookingService {
         return BookingMapper.toDtoResponse(bookingRepository.save(booking));
     }
 
-    public BookingDtoResponse approveBooking(long bookingId, long userId, boolean approved) {
+    public BookingDtoResponse approveBooking(long bookingId, long userId, boolean state) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BadRequestException("User not found with id: " + userId));
+                .orElseThrow(() -> new ServerErrorException("User not found with id: " + userId));
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Booking not found with id: " + bookingId));
 
         if (!booking.getItem().getOwner().equals(user)) {
-            throw new BadRequestException("You are not owner of this booking");
+            throw new ServerErrorException("You are not owner of this booking");
         }
-        booking.setStatus(approved ? BookingState.APPROVED : BookingState.REJECTED);
+        booking.setStatus(state ? BookingState.APPROVED : BookingState.REJECTED);
         return BookingMapper.toDtoResponse(bookingRepository.save(booking));
     }
 
     private void inputValidator(Booking booking) {
 
         if (booking.getStartTime() == null || booking.getEndTime() == null) {
-            throw new BadRequestException("Booking start time and end time must be set");
+            throw new ServerErrorException("Booking start time and end time must be set");
         }
         if (booking.getStartTime().isAfter(booking.getEndTime())) {
-            throw new BadRequestException("Booking start time must be after end time");
+            throw new ServerErrorException("Booking start time must be after end time");
         }
         if (booking.getStartTime().equals(booking.getEndTime())) {
-            throw new BadRequestException("Booking start must not be the same time");
+            throw new ServerErrorException("Booking start must not be the same time");
         }
 
-        if (booking.getStartTime().isBefore(LocalDateTime.now())) {
-            throw new BadRequestException("Booking start time must be in the present");
+        LocalDateTime now = LocalDateTime.now();
+        if (booking.getStartTime().isBefore(now)) {
+            throw new ServerErrorException("Booking start time must be in the future or present");
         }
+
 
         if (!booking.getItem().getAvailable()) {
-            throw new BadRequestException("Booking is not available");
+            throw new ServerErrorException("Booking is not available");
         }
     }
 }
