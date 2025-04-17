@@ -15,6 +15,8 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,8 +29,36 @@ public class BookingServiceImpl implements BookingService {
     private final ItemRepository itemRepository;
 
 
-    public List<BookingDtoResponse> getAllBookings(long userId) {
+    public List<BookingDtoResponse> getAllBookings(long userId, String noConvertedState) {
+        BookingState state;
+        try {
+            state = BookingState.valueOf(noConvertedState);
+        } catch (IllegalArgumentException e) {
+            state = BookingState.ALL;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        BookingState finalState = state;
         return bookingRepository.findByUserId(userId).stream()
+                .filter(booking -> {
+                    switch (finalState) {
+                        case WAITING:
+                            return booking.getStatus() == BookingState.WAITING;
+                        case APPROVED:
+                            return booking.getStatus() == BookingState.APPROVED;
+                        case REJECTED:
+                            return booking.getStatus() == BookingState.REJECTED;
+                        case CURRENT:
+                            return !booking.getStartTime().isAfter(now) && !booking.getEndTime().isBefore(now);
+                        case PAST:
+                            return booking.getEndTime().isBefore(now);
+                        case FUTURE:
+                            return booking.getStartTime().isAfter(now);
+                        case ALL:
+                        default:
+                            return true;
+                    }
+                })
+                .sorted(Comparator.comparing(Booking::getStartTime).reversed())
                 .map(BookingMapper::toDtoResponse)
                 .collect(Collectors.toList());
     }

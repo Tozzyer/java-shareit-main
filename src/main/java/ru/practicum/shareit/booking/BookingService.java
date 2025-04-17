@@ -10,7 +10,7 @@ public interface BookingService {
 
     BookingDtoResponse approveBooking(long bookingId, long userId, boolean approved);
 
-    List<BookingDtoResponse> getAllBookings(long userId);
+    List<BookingDtoResponse> getAllBookings(long userId, String state);
 
     BookingDtoResponse getBookingById(long bookingId, long userId);
 }

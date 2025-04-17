@@ -6,6 +6,7 @@ import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.practicum.shareit.booking.model.BookingState;
 
 import java.util.List;
 
@@ -36,8 +37,8 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingDtoResponse> getAllBookings(@RequestHeader("X-Sharer-User-Id") long userId) {
+    public List<BookingDtoResponse> getAllBookings(@RequestHeader("X-Sharer-User-Id") long userId, @RequestParam(name = "state", required = false, defaultValue = "ALL") String state) {
         log.info("BookingDtoRequest: {}", userId);
-        return bookingService.getAllBookings(userId);
+        return bookingService.getAllBookings(userId, state);
     }
 }

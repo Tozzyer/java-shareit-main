@@ -15,10 +15,10 @@ CONSTRAINT fk_items_owner FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE C
 
 CREATE TABLE IF NOT EXISTS comments (
 id SERIAL PRIMARY KEY,
-text VARCHAR,
-item_id BIGINT,
-author_name VARCHAR,
-created TIMESTAMP,
+text VARCHAR NOT NULL,
+item_id BIGINT NOT NULL,
+author_name VARCHAR NOT NULL,
+created TIMESTAMP NOT NULL,
 CONSTRAINT fk_comments_item FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE
 );
 
