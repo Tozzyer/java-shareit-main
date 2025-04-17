@@ -6,7 +6,6 @@ import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.practicum.shareit.booking.model.BookingState;
 
 import java.util.List;
 
