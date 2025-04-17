@@ -1,5 +1,5 @@
 package ru.practicum.shareit.booking;
-
+//Checkstyle
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
