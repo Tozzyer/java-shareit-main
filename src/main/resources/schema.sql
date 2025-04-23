@@ -33,3 +33,10 @@ end_time TIMESTAMP,
 CONSTRAINT fk_booking_item FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
 CONSTRAINT fk_booking_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS requests (
+    id SERIAL PRIMARY KEY,
+    description VARCHAR NOT NULL,
+    user_id BIGINT NOT NULL,
+    CONSTRAINT fk_requests_owner FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
