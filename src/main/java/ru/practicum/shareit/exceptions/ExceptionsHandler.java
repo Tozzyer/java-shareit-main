@@ -1,9 +1,11 @@
 package ru.practicum.shareit.exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Map;
 
@@ -16,9 +18,9 @@ public class ExceptionsHandler {
         return Map.of("Error message: ", e.getMessage());
     }
 
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(ServerErrorException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, String> badRequstExceptionHandler(BadRequestException e) {
+    public Map<String, String> serverErrorExceptionHandler(ServerErrorException e) {
         return Map.of("Error message: ", e.getMessage());
     }
 
@@ -28,4 +30,18 @@ public class ExceptionsHandler {
         return Map.of("Error message: ", e.getMessage());
     }
 
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<String> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String message = String.format(
+                "Invalid value for parameter '%s': '%s'. Expected type: %s.",
+                ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName()
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> badRequestExceptionHandler(BadRequestException e) {
+        return Map.of("Error message: ", e.getMessage());
+    }
 }
