@@ -3,11 +3,12 @@ package ru.practicum.shareit.request;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * TODO Sprint add-item-requests.
@@ -26,7 +27,6 @@ public class ItemRequest {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User owner;
-
     @Column
     private LocalDateTime created;
 }

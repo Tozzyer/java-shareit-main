@@ -9,14 +9,15 @@ import ru.practicum.shareit.user.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class RequestServiceImpl implements RequestService {
 
-    ItemRequestRepository itemRequestRepository;
-    ItemRequestMapper itemRequestMapper;
-    UserRepository userRepository;
+    private final ItemRequestRepository itemRequestRepository;
+    private final ItemRequestMapper itemRequestMapper;
+    private final UserRepository userRepository;
 
 
     @Override
@@ -24,18 +25,24 @@ public class RequestServiceImpl implements RequestService {
                 User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
         LocalDateTime now = LocalDateTime.now();
-        ItemRequest itemRequest = ItemRequestMapper.fromDto(dto, user);
+        ItemRequest itemRequest = itemRequestMapper.fromDto(dto, user);
         itemRequest.setCreated(now);
-        return ItemRequestMapper.toDto(itemRequestRepository.save(itemRequest));
+        return itemRequestMapper.toDto(itemRequestRepository.save(itemRequest));
     }
 
     @Override
     public List<ItemRequestDto> getRequestsByUserId(long userId) {
-        return List.of();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        return itemRequestRepository.getRequestsByOwnerId(userId).stream()
+                .map(itemRequestMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public ItemRequestDto getRequestById(long id) {
-        return null;
+
+        System.out.println(itemRequestRepository.getRequestsById(id));
+        return itemRequestMapper.toDto(itemRequestRepository.getRequestsById(id));
     }
 }

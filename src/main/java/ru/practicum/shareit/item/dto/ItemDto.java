@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.Data;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ public class ItemDto {
     private List<CommentDto> comments;
     private BookingDtoResponse lastBooking;
     private BookingDtoResponse nextBooking;
+    private long requestId;
 }
