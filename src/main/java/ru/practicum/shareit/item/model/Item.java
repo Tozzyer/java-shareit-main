@@ -30,6 +30,6 @@ public class Item {
     @JoinColumn(name = "user_id")
     private User owner;
     @ManyToOne
-    @JoinColumn (name = "itemrequest_id")
+    @JoinColumn(name = "itemrequest_id")
     private ItemRequest itemRequest;
 }

@@ -8,9 +8,7 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 
 import java.util.List;
 
-/**
- * TODO Sprint add-item-requests.
- */
+
 @RestController
 @RequestMapping(path = "/requests")
 public class ItemRequestController {
@@ -32,10 +30,10 @@ public class ItemRequestController {
         return requestService.getRequestsByUserId(userId);
     }
 
-    @GetMapping ("/{id}")
+    @GetMapping("/{id}")
     public ItemRequestDto getRequestById(@PathVariable long id) {
         log.info("Get request by id: " + id);
-        System.out.println("getRequestById"+id);
+        System.out.println("getRequestById" + id);
         return requestService.getRequestById(id);
     }
 

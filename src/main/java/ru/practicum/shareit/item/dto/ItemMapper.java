@@ -35,7 +35,9 @@ public class ItemMapper {
                 .collect(Collectors.toList()));
         itemDto.setLastBooking(null);
         itemDto.setNextBooking(null);
-        if(item.getItemRequest() != null) { itemDto.setRequestId(item.getItemRequest().getId()); }
+        if (item.getItemRequest() != null) {
+            itemDto.setRequestId(item.getItemRequest().getId());
+        }
         return itemDto;
     }
 }

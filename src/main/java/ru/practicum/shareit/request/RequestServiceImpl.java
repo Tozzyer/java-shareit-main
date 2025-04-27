@@ -22,7 +22,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public ItemRequestDto createRequest(ItemRequestDto dto, long userId) {
-                User user = userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
         LocalDateTime now = LocalDateTime.now();
         ItemRequest itemRequest = itemRequestMapper.fromDto(dto, user);

@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface ItemRequestRepository extends JpaRepository<ItemRequest, Long> {
     public List<ItemRequest> getRequestsByOwnerId(long userId);
+
     public ItemRequest getRequestsById(long id);
 }
