@@ -33,7 +33,6 @@ import ru.practicum.shareit.request.RequestServiceImpl;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.user.*;
 
-import javax.xml.validation.Validator;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
