@@ -2,7 +2,6 @@ package ru.practicum.shareit.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import ru.practicum.shareit.user.User;
 
@@ -18,7 +17,6 @@ public class ItemRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column
-    @NotBlank
     private String description;
     @ManyToOne
     @JoinColumn(name = "user_id")

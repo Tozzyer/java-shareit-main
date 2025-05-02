@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.user.dto.UserDto;
 
 @RestController
@@ -15,6 +16,10 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Object> createUser(@Valid @RequestBody UserDto user) {
+        if (user.getName() == null || user.getName().isBlank()
+                || user.getEmail() == null || user.getEmail().isBlank()) {
+            throw new BadRequestException("Email failed");
+        }
         return userClient.createUser(user);
     }
 
