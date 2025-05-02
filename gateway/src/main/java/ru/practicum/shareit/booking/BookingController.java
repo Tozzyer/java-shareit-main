@@ -25,7 +25,7 @@ public class BookingController {
 											  @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
 											  @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
 		BookingState state = BookingState.from(stateParam)
-				.orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
+				.orElseThrow(() -> new IllegalArgumentException("Failed state: " + stateParam));
 		return bookingClient.getBookings(userId, state, from, size);
 	}
 
@@ -48,14 +48,14 @@ public class BookingController {
 	public ResponseEntity<Object> approveBooking(@PathVariable long bookingId,
 												 @RequestHeader("X-Sharer-User-Id") long ownerId,
 												 @RequestParam boolean approved) {
-		return bookingClient.approveBooking(bookingId, ownerId, approved);
+		return bookingClient.updateBooking(bookingId, ownerId, approved);
 	}
 
 	@GetMapping(value = "/owner")
 	public ResponseEntity<Object> getBookingsForOwner(@RequestHeader("X-Sharer-User-Id") long ownerId,
 													  @RequestParam(required = false, defaultValue = "ALL") String state) {
 		BookingState bookingState = BookingState.from(state)
-				.orElseThrow(() -> new IllegalArgumentException("Unknown state: " + state));
+				.orElseThrow(() -> new IllegalArgumentException("Failed state: " + state));
 		return bookingClient.getBookings(ownerId, bookingState);
 	}
 }
