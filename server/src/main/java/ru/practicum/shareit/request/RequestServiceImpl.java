@@ -41,7 +41,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ItemRequestDto> getAllItemRequests(long userId) {
-        return itemRequestRepository.findByUserIdNot(userId).stream().map(itemRequestMapper::toDto).toList();
+        return itemRequestRepository.findByOwner_IdNot(userId).stream().map(itemRequestMapper::toDto).toList();
     }
 
     @Override
