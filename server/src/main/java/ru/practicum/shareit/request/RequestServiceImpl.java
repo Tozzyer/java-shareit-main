@@ -8,6 +8,7 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +35,9 @@ public class RequestServiceImpl implements RequestService {
     public List<ItemRequestDto> getRequestsByUserId(long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
+
         return itemRequestRepository.getRequestsByOwnerId(userId).stream()
+                .sorted(Comparator.comparing(ItemRequest::getCreated).reversed())
                 .map(itemRequestMapper::toDto)
                 .collect(Collectors.toList());
     }
