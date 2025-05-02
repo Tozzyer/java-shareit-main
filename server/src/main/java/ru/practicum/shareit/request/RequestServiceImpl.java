@@ -40,6 +40,11 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    public List<ItemRequestDto> getAllItemRequests(long userId) {
+        return itemRequestRepository.findByUserIdNot(userId).stream().map(itemRequestMapper::toDto).toList();
+    }
+
+    @Override
     public ItemRequestDto getRequestById(long id) {
 
         System.out.println(itemRequestRepository.getRequestsById(id));

@@ -15,4 +15,6 @@ public interface RequestService {
 
     public ItemRequestDto getRequestById(long id);
 
+    public List<ItemRequestDto> getAllItemRequests(long userId);
+
 }

@@ -15,8 +15,11 @@ public class ItemRequestController {
 
     private static Logger log = LoggerFactory.getLogger(ItemRequestController.class);
 
-    @Autowired
-    RequestService requestService;
+    private final RequestService requestService;
+
+    public ItemRequestController(RequestService requestService) {
+        this.requestService = requestService;
+    }
 
     @PostMapping
     public ItemRequestDto createRequest(@RequestHeader("X-Sharer-User-Id") long userId, @RequestBody ItemRequestDto requestDto) {
@@ -35,6 +38,11 @@ public class ItemRequestController {
         log.info("Get request by id: " + id);
         System.out.println("getRequestById" + id);
         return requestService.getRequestById(id);
+    }
+
+    @GetMapping(path = "/all")
+    public List<ItemRequestDto> getAllItemRequests(@RequestHeader("X-Sharer-User-Id") long userId) {
+        return requestService.getAllItemRequests(userId);
     }
 
 }
